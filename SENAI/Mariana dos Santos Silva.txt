@@ -1,0 +1,77 @@
+Questão 2: 
+1. Baixar os arquivos de empresas usando o selenium no python;
+2. Extrair os arquivos das empresas usando a biblioteca zipfile;
+
+
+Questão 3:
+--base criada no postgrees:
+
+create table employees
+(employee_id int primary key
+,employee_name varchar(50)
+	);
+
+create table departments(
+department_id int primary key
+,department_name varchar(30)
+);
+
+create table employee_department_history
+(employee_id int
+,department_id int 
+,start_date date
+,end_date date
+,CONSTRAINT fk_employee
+      FOREIGN KEY(employee_id) 
+        REFERENCES employees(employee_id)
+,CONSTRAINT fk_department
+      FOREIGN KEY(department_id) 
+        REFERENCES departments(department_id)
+);
+
+
+INSERT INTO employees values (1,'Mariana');
+INSERT INTO employees values (2,'Gilberto');
+INSERT INTO employees values (3,'Rodrigo Santos');
+INSERT INTO employees values (4,'Rodrigo Guimaraes');
+
+INSERT INTO departments values (1,'Administrativo');
+INSERT INTO departments values (2,'Operações');
+INSERT INTO departments values (3,'EATI');
+INSERT INTO departments values (4,'DBM');
+INSERT INTO departments values (5,'Desenvolvimento');
+INSERT INTO departments values (6,'BI');
+INSERT INTO departments values (7,'Suporte');
+	;
+INSERT INTO employee_department_history values (1,3,'2014/09/01','2016/04/30');
+INSERT INTO employee_department_history values (1,6,'2016/05/01');
+INSERT INTO employee_department_history values (2,1,'2006/06/01','2009/12/31');
+INSERT INTO employee_department_history values (2,2,'2010/01/01','2012/12/31');
+INSERT INTO employee_department_history values (2,3,'2013/01/01','2016/08/31');
+INSERT INTO employee_department_history values (2,5,'2016/09/01');
+INSERT INTO employee_department_history values (3,7,'2013/02/01');
+INSERT INTO employee_department_history values (4,1,'2009/07/01','2014/05/31');
+INSERT INTO employee_department_history values (4,6,'2014/06/01');
+
+
+SELECT employee_name
+,atual
+,COUNT(department_id) qtd_departamentos
+FROM employees
+INNER JOIN employee_department_history ON employees.employee_id = employee_department_history.employee_id
+INNER JOIN (select employee_id,
+	case 
+	when end_date is null then department_name
+else
+	null
+end atual
+from employee_department_history
+INNER JOIN departments ON departments.department_id = employee_department_history.department_id
+where end_date is null) departamento ON departamento.employee_id = employee_department_history.employee_id
+group by employee_name,atual
+
+Questão 4:
+
+Questão 5: Uma alternativa para uma mudança na comportamento de comparação, é alterar as variáveis de uso. Caso seja possível, adicionar variantes pode trazer uma melhora na projeção. Altenativamente, é possível também reduzir o número de variantes analisadas. Por exemplo se estiverem sendo analisadas duas ações de um determinado setor, a possíbilidade da incluisão de uma terceira. Caso estejam sendo analisadas mais de uma, alterná-las comparando-se isoladamente como cada uma se comporta com cada.
+
+Questão 6: Alternativa A
